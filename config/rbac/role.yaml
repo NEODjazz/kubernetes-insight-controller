@@ -1,0 +1,26 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: k8s-insight-controller
+rules:
+  - apiGroups: [""]
+    resources: ["nodes", "pods", "services", "events"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch", "update"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["insights.platform.example.com"]
+    resources: ["insightreports"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["insights.platform.example.com"]
+    resources: ["insightreports/status"]
+    verbs: ["get", "patch", "update"]
+  - apiGroups: ["insights.platform.example.com"]
+    resources: ["insightreportsnapshots"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]

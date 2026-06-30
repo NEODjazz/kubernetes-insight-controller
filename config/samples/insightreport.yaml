@@ -1,0 +1,28 @@
+apiVersion: insights.platform.example.com/v1alpha1
+kind: InsightReport
+metadata:
+  name: cluster-health
+  namespace: k8s-insight-system
+spec:
+  namespaces:
+    - default
+    - kube-system
+  prometheusURL: http://prometheus-operated.monitoring.svc:9090
+  interval: 30m
+  retentionDays: 30
+  includeEvents: true
+  maxMetricSamples: 4
+  llmProvider: azureOpenAI
+  azureEndpoint: https://your-resource.openai.azure.com
+  azureDeployment: your-foundry-deployment-name
+  azureAPIVersion: "2024-10-21"
+  systemPrompt: >-
+    You are a senior Kubernetes SRE. Analyze cluster state and Prometheus
+    metrics. Return concise, actionable recommendations in Russian. Prioritize
+    reliability, cost, performance, security, and observability. Do not invent
+    facts that are absent from the snapshot.
+  userPrompt: |-
+    Analyze this Kubernetes cluster snapshot and produce prioritized
+    improvements with evidence and suggested next actions:
+
+    {{snapshot}}

@@ -1,0 +1,17 @@
+apiVersion: insights.platform.example.com/v1alpha1
+kind: InsightReport
+metadata:
+  name: cluster-health-ollama
+  namespace: k8s-insight-system
+spec:
+  namespaces:
+    - default
+    - kube-system
+  prometheusURL: http://prometheus-operated.monitoring.svc:9090
+  interval: 30m
+  retentionDays: 30
+  includeEvents: true
+  maxMetricSamples: 4
+  llmProvider: ollama
+  ollamaEndpoint: http://ollama.ollama.svc.cluster.local:11434
+  ollamaModel: qwen3:8b

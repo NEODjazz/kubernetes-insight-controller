@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-insight-controller
+  namespace: k8s-insight-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: k8s-insight-controller
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: k8s-insight-controller
+    spec:
+      serviceAccountName: k8s-insight-controller
+      containers:
+        - name: manager
+          image: k8s-insight-controller:dev
+          imagePullPolicy: Never
+          args:
+            - --leader-elect
+            - --web-bind-address=:8090
+          env:
+            - name: AZURE_OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: azure-openai
+                  key: api-key
+                  optional: true
+            - name: OLLAMA_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ollama
+                  key: api-key
+                  optional: true
+          ports:
+            - name: metrics
+              containerPort: 8080
+            - name: health
+              containerPort: 8081
+            - name: web
+              containerPort: 8090
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: health
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: health
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65532
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
