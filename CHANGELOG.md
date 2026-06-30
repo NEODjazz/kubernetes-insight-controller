@@ -7,15 +7,13 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ## [Unreleased]
 
-### Added
-
-- GitHub Actions workflows for CI tests and tagged releases.
-- Build-time version metadata exposed with the manager `--version` flag.
-- Apache License 2.0 project license.
+No unreleased changes.
 
 ## [0.1.0] - 2026-06-30
 
 ### Added
 
 - Initial Kubernetes Insight Controller implementation.
-
+- GitHub Actions workflows for CI tests and tagged releases.
+- Build-time version metadata exposed with the manager `--version` flag.
+- Apache License 2.0 project license.

@@ -25,8 +25,10 @@ make build
 
 1. Update `VERSION`.
 2. Update `CHANGELOG.md`.
-3. Commit the changes.
-4. Create and push a tag:
+3. Make sure `config/manager/deployment.yaml` points to the release image tag.
+4. Run local checks.
+5. Commit the changes.
+6. Create and push a tag:
 
 ```bash
 git tag v0.1.0
@@ -37,4 +39,3 @@ The release workflow publishes:
 
 - GitHub release notes with checksummed manager binaries.
 - A multi-architecture container image at `ghcr.io/<owner>/<repo>`.
-

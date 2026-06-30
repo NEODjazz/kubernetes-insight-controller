@@ -10,8 +10,7 @@ permissions:
   packages: write
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE: ghcr.io/neodjazz/kubernetes-insight-controller
 
 jobs:
   binaries:
@@ -79,7 +78,7 @@ jobs:
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -87,7 +86,7 @@ jobs:
         id: docker_meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.IMAGE }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -105,4 +104,3 @@ jobs:
             VERSION=${{ steps.meta.outputs.version }}
             COMMIT=${{ github.sha }}
             DATE=${{ steps.meta.outputs.date }}
-

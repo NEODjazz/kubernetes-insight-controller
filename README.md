@@ -82,11 +82,10 @@ go build ./cmd/manager
 ## Deploy
 
 The default manifest uses the published GitHub Container Registry image:
-`ghcr.io/neodjazz/kubernetes-insight-controller:latest`.
+`ghcr.io/neodjazz/kubernetes-insight-controller:0.1.0`.
 
-For production, pin a released tag in `config/manager/deployment.yaml`, for
-example `ghcr.io/neodjazz/kubernetes-insight-controller:0.1.0`, then install
-the controller:
+To move to another release, update the tag in `config/manager/deployment.yaml`,
+then install the controller:
 
 ```bash
 kubectl apply -k config
