@@ -2,6 +2,8 @@
 
 Kubernetes controller that periodically collects cluster state, workload health, warning events, and selected Prometheus metrics, then asks Azure OpenAI or Ollama for prioritized optimization recommendations.
 
+![Test](https://github.com/NEODjazz/kubernetes-insight-controller/actions/workflows/test.yml/badge.svg)
+
 Select the external LLM per `InsightReport` with `spec.llmProvider`. Supported values are `azureOpenAI` (the default for backward compatibility) and `ollama`.
 
 ## What it analyzes
@@ -65,21 +67,34 @@ The controller RBAC intentionally does not include `get`, `list`, or `watch` acc
 ## Local build
 
 ```bash
-go mod tidy
+make test
+make build
+./bin/k8s-insight-controller --version
+```
+
+Without `make`, use the Go toolchain directly:
+
+```bash
+go test ./...
 go build ./cmd/manager
 ```
 
 ## Deploy
 
-Build and push the image, update `config/manager/deployment.yaml`, then apply:
+The default manifest uses the published GitHub Container Registry image:
+`ghcr.io/neodjazz/kubernetes-insight-controller:latest`.
+
+For production, pin a released tag in `config/manager/deployment.yaml`, for
+example `ghcr.io/neodjazz/kubernetes-insight-controller:0.1.0`, then install
+the controller:
 
 ```bash
-kubectl apply -f config/crd/bases
-kubectl apply -f config/manager/namespace.yaml
-kubectl apply -f config/rbac
-kubectl apply -f config/manager/service.yaml
-kubectl apply -f config/manager/ingress.yaml
-kubectl apply -f config/manager/deployment.yaml
+kubectl apply -k config
+```
+
+Then apply credentials and one report sample:
+
+```bash
 kubectl apply -f config/samples/azure-openai-secret.yaml
 kubectl apply -f config/samples/insightreport.yaml
 ```
@@ -104,11 +119,8 @@ kubectl -n k8s-insight-system get insightreportsnapshots
 
 The manager exposes a read-only web UI that lists all `InsightReportSnapshot` resources. Snapshots can be filtered by source `InsightReport`, snapshot name, and recommendation text. Recommendations returned by the model are rendered as sanitized Markdown.
 
-When Traefik or another Kubernetes Ingress controller is available, deploy the Web UI Ingress and open `http://k8s-insight.localhost`:
-
-```bash
-kubectl apply -f config/manager/ingress.yaml
-```
+When Traefik or another Kubernetes Ingress controller is available, the standard
+install includes the Web UI Ingress. Open `http://k8s-insight.localhost`.
 
 For direct local access without Ingress, use port-forward:
 
@@ -124,3 +136,13 @@ The C4 architecture model, deployment view, and data-flow diagrams are defined i
 Structurizr DSL at [`docs/architecture/workspace.dsl`](docs/architecture/workspace.dsl).
 See [`docs/architecture/README.md`](docs/architecture/README.md) for rendering
 instructions and a summary of the data flows.
+
+## Releases
+
+The project uses semantic versioning. Published releases are created from tags
+like `v0.1.0`; GitHub Actions publishes checksummed binaries and a GHCR image.
+See [`docs/releases/README.md`](docs/releases/README.md).
+
+## License
+
+Licensed under the Apache License, Version 2.0. See [`LICENSE`](LICENSE).

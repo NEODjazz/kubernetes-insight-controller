@@ -16,8 +16,8 @@ spec:
       serviceAccountName: k8s-insight-controller
       containers:
         - name: manager
-          image: k8s-insight-controller:dev
-          imagePullPolicy: Never
+          image: ghcr.io/neodjazz/kubernetes-insight-controller:latest
+          imagePullPolicy: IfNotPresent
           args:
             - --leader-elect
             - --web-bind-address=:8090

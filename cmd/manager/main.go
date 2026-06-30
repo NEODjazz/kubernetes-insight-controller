@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -17,6 +18,7 @@ import (
 
 	"k8s-insight-controller/api/v1alpha1"
 	"k8s-insight-controller/internal/controller"
+	"k8s-insight-controller/internal/version"
 	"k8s-insight-controller/internal/webui"
 )
 
@@ -34,13 +36,20 @@ func main() {
 	var enableLeaderElection bool
 	var probeAddr string
 	var webAddr string
+	var showVersion bool
 	flag.StringVar(&metricsAddr, "metrics-bind-address", ":8080", "The address the metric endpoint binds to.")
 	flag.StringVar(&probeAddr, "health-probe-bind-address", ":8081", "The address the probe endpoint binds to.")
 	flag.StringVar(&webAddr, "web-bind-address", ":8090", "The address the web UI endpoint binds to.")
 	flag.BoolVar(&enableLeaderElection, "leader-elect", false, "Enable leader election for controller manager.")
+	flag.BoolVar(&showVersion, "version", false, "Print version information and exit.")
 	opts := zap.Options{Development: os.Getenv("ENV") != "prod"}
 	opts.BindFlags(flag.CommandLine)
 	flag.Parse()
+
+	if showVersion {
+		fmt.Printf("k8s-insight-controller %s commit=%s date=%s\n", version.Version, version.Commit, version.Date)
+		return
+	}
 
 	ctrl.SetLogger(zap.New(zap.UseFlagOptions(&opts)))
 
@@ -51,7 +60,7 @@ func main() {
 		},
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
-		LeaderElectionID:       "k8s-insight-controller.platform.example.com",
+		LeaderElectionID:       "k8s-insight-controller.k8s-insights-platform.io",
 	})
 	if err != nil {
 		ctrl.Log.Error(err, "unable to start manager")
@@ -81,7 +90,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	ctrl.Log.Info("starting manager")
+	ctrl.Log.Info("starting manager", "version", version.Version, "commit", version.Commit, "date", version.Date)
 	if err := mgr.Start(ctrl.SetupSignalHandler()); err != nil {
 		ctrl.Log.Error(err, "problem running manager")
 		os.Exit(1)

@@ -1,4 +1,4 @@
-apiVersion: insights.platform.example.com/v1alpha1
+apiVersion: k8s-insights-platform.io/v1alpha1
 kind: InsightReport
 metadata:
   name: cluster-health
