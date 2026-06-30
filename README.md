@@ -85,12 +85,12 @@ Install the controller from the published release manifest without cloning the
 repository:
 
 ```bash
-kubectl apply -f https://github.com/NEODjazz/kubernetes-insight-controller/releases/download/v0.1.0/k8s-insight-controller.yaml
+kubectl apply -f https://github.com/NEODjazz/kubernetes-insight-controller/releases/download/v0.1.1/k8s-insight-controller.yaml
 kubectl -n k8s-insight-system rollout status deployment/k8s-insight-controller
 ```
 
 The release manifest uses the published GitHub Container Registry image:
-`ghcr.io/neodjazz/kubernetes-insight-controller:0.1.0`.
+`ghcr.io/neodjazz/kubernetes-insight-controller:0.1.1`.
 
 To move to another release, update the tag in `config/manager/deployment.yaml`,
 then install the controller:
@@ -105,14 +105,14 @@ Then apply credentials and one report sample:
 kubectl -n k8s-insight-system create secret generic azure-openai \
   --from-literal=api-key="$AZURE_OPENAI_API_KEY"
 
-kubectl apply -f https://raw.githubusercontent.com/NEODjazz/kubernetes-insight-controller/v0.1.0/config/samples/insightreport.yaml
+kubectl apply -f https://raw.githubusercontent.com/NEODjazz/kubernetes-insight-controller/v0.1.1/config/samples/insightreport.yaml
 ```
 
 To use Ollama instead, apply the Ollama sample. The Azure API key Secret is
 optional when all reports use Ollama:
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/NEODjazz/kubernetes-insight-controller/v0.1.0/config/samples/insightreport-ollama.yaml
+kubectl apply -f https://raw.githubusercontent.com/NEODjazz/kubernetes-insight-controller/v0.1.1/config/samples/insightreport-ollama.yaml
 ```
 
 If you already have the repository locally, the equivalent local install is:
@@ -125,7 +125,7 @@ kubectl apply -f config/samples/insightreport.yaml
 To uninstall the controller:
 
 ```bash
-kubectl delete -f https://github.com/NEODjazz/kubernetes-insight-controller/releases/download/v0.1.0/k8s-insight-controller.yaml
+kubectl delete -f https://github.com/NEODjazz/kubernetes-insight-controller/releases/download/v0.1.1/k8s-insight-controller.yaml
 ```
 
 Read the result:
@@ -167,7 +167,7 @@ instructions and a summary of the data flows.
 ## Releases
 
 The project uses semantic versioning. Published releases are created from tags
-like `v0.1.0`; GitHub Actions publishes checksummed binaries and a GHCR image.
+like `v0.1.1`; GitHub Actions publishes checksummed binaries and a GHCR image.
 See [`docs/releases/README.md`](docs/releases/README.md).
 
 ## License

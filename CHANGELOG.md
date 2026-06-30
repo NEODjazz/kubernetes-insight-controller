@@ -9,6 +9,17 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 No unreleased changes.
 
+## [0.1.1] - 2026-06-30
+
+### Added
+
+- Release install manifest for installing the controller without cloning the repository.
+- README installation, sample, rollout check, and uninstall commands based on release URLs.
+
+### Changed
+
+- Default deployment image tag now points to `ghcr.io/neodjazz/kubernetes-insight-controller:0.1.1`.
+
 ## [0.1.0] - 2026-06-30
 
 ### Added

@@ -16,7 +16,7 @@ spec:
       serviceAccountName: k8s-insight-controller
       containers:
         - name: manager
-          image: ghcr.io/neodjazz/kubernetes-insight-controller:0.1.0
+          image: ghcr.io/neodjazz/kubernetes-insight-controller:0.1.1
           imagePullPolicy: IfNotPresent
           args:
             - --leader-elect

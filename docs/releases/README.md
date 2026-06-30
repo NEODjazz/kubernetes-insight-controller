@@ -1,7 +1,7 @@
 # Releases
 
 The project uses semantic versioning. Release tags must use the `vMAJOR.MINOR.PATCH`
-format, for example `v0.1.0`.
+format, for example `v0.1.1`.
 
 ## Version sources
 
@@ -31,8 +31,8 @@ make build
 6. Create and push a tag:
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.1.1
+git push origin v0.1.1
 ```
 
 The release workflow publishes:
