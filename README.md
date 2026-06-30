@@ -81,7 +81,15 @@ go build ./cmd/manager
 
 ## Deploy
 
-The default manifest uses the published GitHub Container Registry image:
+Install the controller from the published release manifest without cloning the
+repository:
+
+```bash
+kubectl apply -f https://github.com/NEODjazz/kubernetes-insight-controller/releases/download/v0.1.0/k8s-insight-controller.yaml
+kubectl -n k8s-insight-system rollout status deployment/k8s-insight-controller
+```
+
+The release manifest uses the published GitHub Container Registry image:
 `ghcr.io/neodjazz/kubernetes-insight-controller:0.1.0`.
 
 To move to another release, update the tag in `config/manager/deployment.yaml`,
@@ -94,11 +102,31 @@ kubectl apply -k config
 Then apply credentials and one report sample:
 
 ```bash
-kubectl apply -f config/samples/azure-openai-secret.yaml
+kubectl -n k8s-insight-system create secret generic azure-openai \
+  --from-literal=api-key="$AZURE_OPENAI_API_KEY"
+
+kubectl apply -f https://raw.githubusercontent.com/NEODjazz/kubernetes-insight-controller/v0.1.0/config/samples/insightreport.yaml
+```
+
+To use Ollama instead, apply the Ollama sample. The Azure API key Secret is
+optional when all reports use Ollama:
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/NEODjazz/kubernetes-insight-controller/v0.1.0/config/samples/insightreport-ollama.yaml
+```
+
+If you already have the repository locally, the equivalent local install is:
+
+```bash
+kubectl apply -k config
 kubectl apply -f config/samples/insightreport.yaml
 ```
 
-To use Ollama instead, apply `config/samples/insightreport-ollama.yaml`. The Azure API key Secret is optional when all reports use Ollama.
+To uninstall the controller:
+
+```bash
+kubectl delete -f https://github.com/NEODjazz/kubernetes-insight-controller/releases/download/v0.1.0/k8s-insight-controller.yaml
+```
 
 Read the result:
 

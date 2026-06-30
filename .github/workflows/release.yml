@@ -51,6 +51,21 @@ jobs:
           done
           (cd dist && sha256sum *.tar.gz > checksums.txt)
 
+      - name: Build install manifest
+        run: |
+          set -eu
+          awk 'FNR == 1 && NR != 1 { print "---" } { print }' \
+            config/crd/bases/k8s-insights-platform.io_insightreports.yaml \
+            config/crd/bases/k8s-insights-platform.io_insightreportsnapshots.yaml \
+            config/manager/namespace.yaml \
+            config/rbac/service_account.yaml \
+            config/rbac/role.yaml \
+            config/rbac/role_binding.yaml \
+            config/manager/deployment.yaml \
+            config/manager/service.yaml \
+            config/manager/ingress.yaml \
+            > dist/k8s-insight-controller.yaml
+
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
         with:
@@ -58,6 +73,7 @@ jobs:
           files: |
             dist/*.tar.gz
             dist/checksums.txt
+            dist/k8s-insight-controller.yaml
 
   image:
     name: Build and publish image

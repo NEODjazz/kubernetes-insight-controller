@@ -39,3 +39,4 @@ The release workflow publishes:
 
 - GitHub release notes with checksummed manager binaries.
 - A multi-architecture container image at `ghcr.io/<owner>/<repo>`.
+- A single install manifest named `k8s-insight-controller.yaml`.
